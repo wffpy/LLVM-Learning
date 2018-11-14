@@ -47,8 +47,8 @@ Value *getLoad(IRBuilder<> &Builder, Value *Address) {
     return Builder.CreateLoad(Address, "load");
 }
 
-Value *getStore(IRBuilder<> &Builder, Value *Address, Value *V) {
-    
+void getStore(IRBuilder<> &Builder, Value *Address, Value *V) {
+    Builder.CreateStore(V, Address, "store"); 
 }
 
 
@@ -67,7 +67,8 @@ int main(int argc, char const *argv[])
     Value *load = getLoad(Builder, gep);
     Value *constant = Builder.getInt32(16);
     Value *val = createArith(Builder, load, constant);
-    Builder.CreateRet(load);
+    getStore(Builder, gep, val);
+    Builder.CreateRet(val);
     verifyFunction(*fooFunc);
     Builder.getInt32(0);
     ModuleOb->dump();
